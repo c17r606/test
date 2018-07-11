@@ -123,7 +123,7 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 			<table class="ui celled table" style="margin-top: auto">
 				<tbody>
 				    <tr ng-show="list.explist.length==0">
-				     <td>診査履歴なし</a></td>
+				     <td><a>診査履歴なし</a></td>
 				    </tr>
 					<tr ng-repeat="eachitem in list.explist">
 						<td><a href="bkdetailinfo.do?userid={{list.userid}}">診断結果{{eachitem.name}}</a></td>
@@ -137,7 +137,7 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 			<table class="ui celled table" style="margin-top: auto">
 				<tbody>
 				    <tr ng-show="list.visitlist.length==0">
-				    <td>通院記録なし</a></td>
+				    <td><a>通院記録なし</a></td>
 				    </tr>
 				    
 					<tr ng-repeat="eachitem in list.visitlist">
