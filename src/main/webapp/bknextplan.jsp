@@ -9,9 +9,6 @@
 <script src="dist/components/form.min.js"></script>
 <script src="dist/components/transition.min.js"></script>
 <script src="dist/semantic.min.js"></script>
-
-<script src="jquery/jquery-3.1.1.min.js"></script>
-<script src="dist/semantic.min.js"></script>
 <script src="angularjs/angular.min.js"></script>
 <script type="text/javascript">
   var app = angular.module('listApp',[]);
@@ -60,9 +57,9 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
          $('#cmodal') .modal('show');
          return;
 	  } else {
-		  //var appointdate=list.getformatappointdatey();
-		  window.location.href = 'bknextplan.do?mode=submit&userid='+list.userlist.userid+'&username='+list.userlist.username+
-				  '&appointdate=0000-00-00&content='+list.content+'&status=0';				  
+		  var appointdate=list.getformatappointdate();
+		  window.location.href = 'bknextplan.do?mode=submit&userid='+list.userlist[0]['userid']+'&username='+list.userlist[0]['username']+
+				  '&appointdate='+appointdate+'&content='+list.content+'&status=0';				  
 	  }
   }
   

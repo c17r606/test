@@ -45,14 +45,13 @@ public class BkNextPlanServlet extends HttpServlet {
 			String appointdate=request.getParameter("appointdate");
 			String content=request.getParameter("content");
 			String status=request.getParameter("status");
-			String sql = "INSERT INTO `cdata_appointments` VALUES (?,?,?,?,?,?) ";
-     		Object[] params = new Object[6];
-     		params[0] = "10";
-     		params[1] = userid;
-     		params[2] = appointdate;
-     		params[3] = " ";
-     		params[4] = content;
-     		params[5] = status;
+			String sql = "INSERT INTO `cdata_appointments`(userid,appointdate,header,content,status) VALUES (?,?,?,?,?) ";
+     		Object[] params = new Object[5];
+     		params[0] = userid;
+     		params[1] = appointdate;
+     		params[2] = "";
+     		params[3] = content;
+     		params[4] = status;
      		JdbcUtil.getInstance().executeUpdate(sql, params);
 			
 			request.getRequestDispatcher("bknextplan.jsp").forward(request, response);
