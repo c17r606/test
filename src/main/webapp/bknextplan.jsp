@@ -9,8 +9,18 @@
 <script src="dist/components/form.min.js"></script>
 <script src="dist/components/transition.min.js"></script>
 <script src="dist/semantic.min.js"></script>
-<script src="angularjs/angular.min.js"></script>
+<script>
+initdata=[];
+initdata.userid = '<%=request.getAttribute("userid")%>';
+initdata.username = '<%=request.getAttribute("username")%>';
+initdata.appointdate = '<%=request.getAttribute("appointdate")%>';
+initdata.content = '<%=request.getAttribute("content")%>';
+initdata.status = '<%=request.getAttribute("status")%>';
+</script>
 
+<script src="jquery/jquery-3.1.1.min.js"></script>
+<script src="dist/semantic.min.js"></script>
+<script src="angularjs/angular.min.js"></script>
 <script type="text/javascript">
   var app = angular.module('listApp',[]);
   
@@ -33,11 +43,14 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
   var list = this;
   list.message ="";
   list.content = "";
+  list.userid=initdata.userid;
+  list.username=initdata.username;
+  list.content=initdata.content;
   list.userlist = [
 	  {'userid':'U0000001' ,'username' : '本田慶応'},
 	  {'userid':'U0000002' ,'username' : '豊田慶応'}]
   list.appointmentinfolist=[
-	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'未確認' },
+	  {'userid':list.userid , 'username':list.username , 'date':initdata.appointdate , 'content':list.content , 'status':initdata.status },
 	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'未確認' }];
   
   list.historyinfolist=[
@@ -48,8 +61,12 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 		 this.message = "通知内容は入力必須です。";
          $('#cmodal') .modal('show');
          return;
+	  } else {
+		  //var birthday=list.getformatbirthday();
+		  window.location.href = 'bknextplan.do?mode=submit&sex=n';
 	  }
   }
+  
 });
 </script>
 

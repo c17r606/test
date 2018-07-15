@@ -19,6 +19,9 @@ public class User {
 	private int langinx;
 	private String address;
 	private String telnum;
+	private Date appointdate;
+	private String content;
+	private String status;
 	
 	public String getUserId() {
 		return userId;
@@ -115,6 +118,24 @@ public class User {
 	}
 	public void setTelnum(String telnum) {
 		this.telnum = telnum;
+	}
+	public Date getAppointDate() {
+		return appointdate;
+	}
+	public void setAppointDate(Date appointdate) {
+		this.appointdate = appointdate;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

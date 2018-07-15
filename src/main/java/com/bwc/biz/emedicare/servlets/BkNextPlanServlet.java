@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import com.bwc.biz.emedicare.common.HashEncoder;
 import com.bwc.biz.emedicare.common.JdbcUtil;
 import com.bwc.biz.emedicare.form.User;
@@ -31,32 +34,41 @@ public class BkNextPlanServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-String mode = request.getParameter("mode");
+		String mode = request.getParameter("mode");
 		
 		HttpSession session = request.getSession();
 		User userinfo = (User)session.getAttribute("userinfo");
-		
 		if("submit".equals(mode)){
-			String no=request.getParameter("no");
-			String userid=userinfo.getUserId();
-			String appointdate=request.getParameter("appointdate");
-			String content=request.getParameter("content");
-			String status=request.getParameter("status");
-			String sql = "update cdata_appointments set no=?, userid=?, appointdate=?, header=NULL, content=?, status=? where userid=?";
-     		Object[] params = new Object[5];
-     		params[0] = no;
-     		params[1] = userid;
-     		params[2] = appointdate;
-     		params[3] = content;
-     		params[4] = status;
+//			String userid=userinfo.getUserId();
+			String username=request.getParameter("username");
+//			String langinx=request.getParameter("langinx");
+//			langinx= langinx == null ? "0" : langinx;
+			String sex=request.getParameter("sex");
+//			String telnum=request.getParameter("telnum");
+//			String address=request.getParameter("address");
+//			String birthday=request.getParameter("birthday");
+			String sql = "update mstr_user set  sex = ? where userid='u0000002'";
+     		Object[] params = new Object[1];
+//     		params[0] = username;
+//     		params[1] = langinx;
+     		params[0] = sex;
+//     		params[3] = telnum;
+//     		params[4] = address;
+//     		params[5] = birthday;
+//     		params[6] = userid;
      		JdbcUtil.getInstance().executeUpdate(sql, params);
      		
-			session.setAttribute("userinfo", userinfo);
+     		userinfo.setUserName(username);
+//     		userinfo.setLanginx(new Integer(langinx));
+//     		userinfo.setSex(sex);
+//     		userinfo.setTelnum(telnum);
+//     		userinfo.setAddress(address);
+//			session.setAttribute("userinfo", userinfo);
 			
-			request.getRequestDispatcher("bknextplan.do").forward(request, response);
+			request.getRequestDispatcher("bknextplan.jsp").forward(request, response);
 		}else{
 			String userid=userinfo.getUserId();
-			String sql = "select * from mstr_user where userid=? and delflg='0'";
+			String sql = "select * from cdata_appointments where userid='U0000002' and no='1'";
      		Object[] params = new Object[1];
      		params[0] = userid;
      		List<Object> userinfolist = JdbcUtil.getInstance().excuteQuery(sql, params);
@@ -64,12 +76,11 @@ String mode = request.getParameter("mode");
      		
      		request.setAttribute("userid", userid);
      		request.setAttribute("username", info.get("username").toString());
-     		request.setAttribute("langinx", Integer.parseInt(info.get("lang").toString()));
-     		request.setAttribute("sex", info.get("sex").toString());
-     		request.setAttribute("telnum", info.get("telnum").toString());
-     		request.setAttribute("address", info.get("address").toString());
-     		request.setAttribute("birthday", info.get("birthday").toString());
-			request.getRequestDispatcher("personalinfo.jsp").forward(request, response);
+     		request.setAttribute("appointdate", info.get("appointdate").toString());
+     		request.setAttribute("content", info.get("content").toString());
+     		request.setAttribute("status", info.get("status").toString());
+     		
+			request.getRequestDispatcher("bknextplan.jsp").forward(request, response);
 		}
 	}
 	
