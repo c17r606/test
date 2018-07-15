@@ -34,8 +34,8 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
   list.appintdate = new Date();
   list.content = "";
   list.userlist = [
-	  {'userid':'U0000001' ,'username' : '本田慶応'},
-	  {'userid':'U0000002' ,'username' : '豊田慶応'}];
+	  {'userid':'U0000001' ,'username' : '豊田慶応'},
+	  {'userid':'U0000002' ,'username' : '本田慶応'}];
   list.appointmentinfolist=[
 	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'未確認' },
 	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'未確認' }];
@@ -58,7 +58,9 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
          return;
 	  } else {
 		  var appointdate=list.getformatappointdate();
-		  window.location.href = 'bknextplan.do?mode=submit&userid='+list.userlist[0]['userid']+'&username='+list.userlist[0]['username']+
+		  var myselect=document.getElementById("userid");
+		  var index=myselect.selectedIndex;
+		  window.location.href = 'bknextplan.do?mode=submit&userid='+list.userlist[index]['userid']+
 				  '&appointdate='+appointdate+'&content='+list.content+'&status=0';				  
 	  }
   }
@@ -89,7 +91,7 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 				<div class="three fields">
 					<div class="field">
 						<label>通知ユーザ</label> 
-						<select class="ui dropdown">
+						<select class="ui dropdown" id="userid">
 							<option ng-repeat="eachitem in list.userlist" ng-model="eachitem.userid">{{eachitem.username}}</option>
 						</select>
 					</div>

@@ -41,7 +41,6 @@ public class BkNextPlanServlet extends HttpServlet {
 		
 		if("submit".equals(mode)){
 			String userid=request.getParameter("userid");
-			String username=request.getParameter("username");
 			String appointdate=request.getParameter("appointdate");
 			String content=request.getParameter("content");
 			String status=request.getParameter("status");
