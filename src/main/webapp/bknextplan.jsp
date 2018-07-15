@@ -9,14 +9,6 @@
 <script src="dist/components/form.min.js"></script>
 <script src="dist/components/transition.min.js"></script>
 <script src="dist/semantic.min.js"></script>
-<script>
-initdata=[];
-initdata.userid = '<%=request.getAttribute("userid")%>';
-initdata.username = '<%=request.getAttribute("username")%>';
-initdata.appointdate = '<%=request.getAttribute("appointdate")%>';
-initdata.content = '<%=request.getAttribute("content")%>';
-initdata.status = '<%=request.getAttribute("status")%>';
-</script>
 
 <script src="jquery/jquery-3.1.1.min.js"></script>
 <script src="dist/semantic.min.js"></script>
@@ -41,20 +33,26 @@ initdata.status = '<%=request.getAttribute("status")%>';
   
 app.controller('ListController', function($scope,$http,transFormFactory) {
   var list = this;
-  list.message ="";
+  list.no = "";
+  list.appintdate = new Date();
   list.content = "";
-  list.userid=initdata.userid;
-  list.username=initdata.username;
-  list.content=initdata.content;
   list.userlist = [
 	  {'userid':'U0000001' ,'username' : '本田慶応'},
-	  {'userid':'U0000002' ,'username' : '豊田慶応'}]
+	  {'userid':'U0000002' ,'username' : '豊田慶応'}];
   list.appointmentinfolist=[
-	  {'userid':list.userid , 'username':list.username , 'date':initdata.appointdate , 'content':list.content , 'status':initdata.status },
+	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'未確認' },
 	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'未確認' }];
   
   list.historyinfolist=[
 	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'確認済' }];
+  
+  list.countage=function(){
+	  var ageDifMs = Date.now() - this.appointdate.getTime();
+	  var ageDate = new Date(ageDifMs); // miliseconds from epoch
+	  list.age= Math.abs(ageDate.getUTCFullYear() - 1970);
+  }
+  
+  //list.countage();
   
   list.onitemclick = function (){
 	  if(this.content == null || this.content.length == 0){
@@ -62,11 +60,20 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
          $('#cmodal') .modal('show');
          return;
 	  } else {
-		  //var birthday=list.getformatbirthday();
-		  window.location.href = 'bknextplan.do?mode=submit&sex=n';
+		  //var appointdate=list.getformatappointdatey();
+		  window.location.href = 'bknextplan.do?mode=submit&userid='+list.userlist.userid+'&username='+list.userlist.username+
+				  '&appointdate=0000-00-00&content='+list.content+'&status=0';				  
 	  }
   }
   
+  list.getformatappointdate = function(){
+	  var dt = list.appointdate;
+	  var y = dt.getFullYear();
+	  var m = ("00" + (dt.getMonth()+1)).slice(-2);
+	  var d = ("00" + dt.getDate()).slice(-2);
+	  var result = y + "-" + m + "-" + d;
+	  return result;
+	}
 });
 </script>
 
@@ -90,7 +97,8 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 						</select>
 					</div>
 					<div class="field">
-						<label>日付</label> <input type="date" placeholder="Middle Name">
+						<label>日付</label>
+						<input type="date" ng-model="list.appointdate" ng-change="list.countage()">
 					</div>
 				</div>
 				<div class="field">
