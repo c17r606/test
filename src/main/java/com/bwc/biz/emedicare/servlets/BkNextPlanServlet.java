@@ -54,21 +54,8 @@ public class BkNextPlanServlet extends HttpServlet {
      		JdbcUtil.getInstance().executeUpdate(sql, params);
 			
 			request.getRequestDispatcher("bknextplan.jsp").forward(request, response);
-		}else{
-//			String userid=userinfo.getUserId();
-//			String sql = "select * from cdata_appointments where userid='U0000002' and no='1'";
-//     		Object[] params = new Object[1];
-//     		params[0] = userid;
-//     		List<Object> userinfolist = JdbcUtil.getInstance().excuteQuery(sql, params);
-//     		Map<String, Object> info = (Map<String, Object>)userinfolist.get(0);
-//     		
-//     		request.setAttribute("userid", userid);
-//     		request.setAttribute("username", info.get("username").toString());
-//     		request.setAttribute("appointdate", info.get("appointdate").toString());
-//     		request.setAttribute("content", info.get("content").toString());
-//     		request.setAttribute("status", info.get("status").toString());
-//     		
-			//request.getRequestDispatcher("bknextplan.jsp").forward(request, response);
+		} else {
+			this.list(request, response);
 		}
 	}
 	
@@ -78,5 +65,26 @@ public class BkNextPlanServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
+	
+	private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+		JSONArray appointmentinfolist = new JSONArray();
+		String sql = "select mstr_user.username username,cdata_appointments.appointdate appointdate,cdata_appointments.content content,cdata_appointments.status status from mstr_user inner join cdata_appointments on cdata_appointments.userid = mstr_user.userid order by cdata_appointments.no";
+		List<Object> userinfodata = JdbcUtil.getInstance().excuteQuery(sql, null);
+ 		int i=0;
+		for (Object data : userinfodata) {
+			Map<String, Object> row = (Map<String, Object>) data;
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("username", row.get("username").toString());
+			jsonObject.put("appointdate", row.get("appointdate").toString());
+			jsonObject.put("content", row.get("content").toString());
+			jsonObject.put("status", row.get("status").toString());
+			appointmentinfolist.put(i, jsonObject);
+			i++;
+		}
+		
+		JSONObject result = new JSONObject();
+		result.put("appointmentinfolist", appointmentinfolist);
+		
+		response.getWriter().write(result.toString());
+	}
 }

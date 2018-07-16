@@ -36,9 +36,26 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
   list.userlist = [
 	  {'userid':'U0000001' ,'username' : '豊田慶応'},
 	  {'userid':'U0000002' ,'username' : '本田慶応'}];
-  list.appointmentinfolist=[
-	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'未確認' },
-	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'未確認' }];
+  
+  list.appointmentinfolist=[];
+  (function(){
+	  	$scope.url =  "bknextplan.do";
+	  	var postdata = {'mode':'list'};
+	      $http(
+	  		{
+	  			method:"POST",
+	  			url:$scope.url,
+	  			data:postdata,
+	  			transformRequest:transFormFactory.transForm,
+	  			headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+	  		}).then(function (result) {
+	  			list.appointmentinfolist = result.data.appointmentinfolist;
+	          }).catch(function (result) {
+	          	list.message = "SORRY!エラーが発生しました。";
+	          	$('#cmodal') .modal('show');
+	          });
+	      
+	  })();
   
   list.historyinfolist=[
 	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'確認済' }];
@@ -124,7 +141,7 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 				</tr>
 				<tr ng-repeat="eachitem in list.appointmentinfolist">
 					<td id="week0"><a href=bkhistorylist.do?userid={{eachitem.userid}}>{{eachitem.username}}</a></td>
-					<td><a href=bkhistorylist.do?userid={{eachitem.userid}}>{{eachitem.date}}</a></td>
+					<td><a href=bkhistorylist.do?userid={{eachitem.userid}}>{{eachitem.appointdate}}</a></td>
 					<td><a href=bkhistorylist.douserid={{eachitem.content}}>{{eachitem.content}}</a></td>
 					<td><a href=bkhistorylist.douserid={{eachitem.status}}>{{eachitem.status}}</a></td>
 				</tr>
@@ -138,7 +155,7 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 			<tbody>
 				<tr ng-repeat="eachitem in list.historyinfolist">
 					<td width="30%" id="week0"><a href=bkhistorylist.do?userid={{eachitem.userid}}>{{eachitem.username}}</a></td>
-					<td width="30%"><a href=bkhistorylist.do?userid={{eachitem.userid}}>{{eachitem.date}}</a></td>
+					<td width="30%"><a href=bkhistorylist.do?userid={{eachitem.userid}}>{{eachitem.appointdate}}</a></td>
 					<td width="20%"><a href=bkhistorylist.douserid={{eachitem.content}}>{{eachitem.content}}</a></td>
 					<td width="20%"><a href=bkhistorylist.douserid={{eachitem.status}}>{{eachitem.status}}</a></td>
 				</tr>
