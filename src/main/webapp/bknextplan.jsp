@@ -38,6 +38,7 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 	  {'userid':'U0000002' ,'username' : '本田慶応'}];
   
   list.appointmentinfolist=[];
+  list.historyinfolist=[];
   (function(){
 	  	$scope.url =  "bknextplan.do";
 	  	var postdata = {'mode':'list'};
@@ -49,16 +50,15 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 	  			transformRequest:transFormFactory.transForm,
 	  			headers:{'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
 	  		}).then(function (result) {
-	  			list.appointmentinfolist = result.data.appointmentinfolist;
+	  			list.appointmentinfolist = result.data[0].appointmentinfolist;
+	  			list.historyinfolist = result.data[1].historyinfolist;
 	          }).catch(function (result) {
-	          	list.message = "SORRY!エラーが発生しました。";
+	          	list.message = "SORRY!エラーが発生しました。1";
 	          	$('#cmodal') .modal('show');
 	          });
 	      
-	  })();
+	  })();  
   
-  list.historyinfolist=[
-	  {'userid':'U0000002' , 'username':'本田慶応' , 'date':'2018-09-08' , 'content':'予定の日付に病院に来てください。' , 'status':'確認済' }];
   
   list.countage=function(){
 	  var ageDifMs = Date.now() - this.appointdate.getTime();

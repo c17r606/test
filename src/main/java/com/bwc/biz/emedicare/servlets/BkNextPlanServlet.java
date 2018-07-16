@@ -68,23 +68,59 @@ public class BkNextPlanServlet extends HttpServlet {
 	
 	private void list(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		JSONArray appointmentinfolist = new JSONArray();
-		String sql = "select mstr_user.username username,cdata_appointments.appointdate appointdate,cdata_appointments.content content,cdata_appointments.status status from mstr_user inner join cdata_appointments on cdata_appointments.userid = mstr_user.userid order by cdata_appointments.no";
-		List<Object> userinfodata = JdbcUtil.getInstance().excuteQuery(sql, null);
+		JSONArray historyinfolist = new JSONArray();
+		String sql1 = "select mstr_user.username username,cdata_appointments.appointdate appointdate,cdata_appointments.content content,cdata_appointments.status status from mstr_user inner join cdata_appointments on cdata_appointments.userid = mstr_user.userid where status=0 order by no desc";
+		String sql2 = "select mstr_user.username username,cdata_appointments.appointdate appointdate,cdata_appointments.content content,cdata_appointments.status status from mstr_user inner join cdata_appointments on cdata_appointments.userid = mstr_user.userid where status=1 order by no desc";
+		List<Object> userinfodata1 = JdbcUtil.getInstance().excuteQuery(sql1, null);
+		List<Object> userinfodata2 = JdbcUtil.getInstance().excuteQuery(sql2, null);
  		int i=0;
-		for (Object data : userinfodata) {
+		for (Object data : userinfodata1) {
 			Map<String, Object> row = (Map<String, Object>) data;
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("username", row.get("username").toString());
-			jsonObject.put("appointdate", row.get("appointdate").toString());
-			jsonObject.put("content", row.get("content").toString());
-			jsonObject.put("status", row.get("status").toString());
-			appointmentinfolist.put(i, jsonObject);
+			JSONObject jsonObject1 = new JSONObject();
+			jsonObject1.put("username", row.get("username").toString());
+			jsonObject1.put("appointdate", row.get("appointdate").toString());
+			jsonObject1.put("content", row.get("content").toString());
+			jsonObject1.put("status", row.get("status").toString());
+			appointmentinfolist.put(i, jsonObject1);
 			i++;
 		}
+		i=0;
+		for (Object data : userinfodata2) {
+			Map<String, Object> row = (Map<String, Object>) data;
+			JSONObject jsonObject2 = new JSONObject();
+			jsonObject2.put("username", row.get("username").toString());
+			jsonObject2.put("appointdate", row.get("appointdate").toString());
+			jsonObject2.put("content", row.get("content").toString());
+			jsonObject2.put("status", row.get("status").toString());
+			historyinfolist.put(i, jsonObject2);
+			i++;
+		}
+		JSONArray result = new JSONArray();
+		JSONObject result1 = new JSONObject();
+		JSONObject result2 = new JSONObject();
+//		JSONObject result0 = new JSONObject();
+		result1.put("appointmentinfolist", appointmentinfolist);
+		result2.put("historyinfolist", historyinfolist);
 		
-		JSONObject result = new JSONObject();
-		result.put("appointmentinfolist", appointmentinfolist);
-		
+		result.put(0, result1);
+		result.put(1, result2);
+//		result0.put(, value)
+		System.out.println(result);
 		response.getWriter().write(result.toString());
 	}
 }
+
+//[
+// {"appointmentinfolist":[
+//                         {"appointdate":"2018-09-08 00:00:00.0","content":"予定の日付に病院に来てください","username":"本田慶応","status":"0"},
+//                         {"appointdate":"2018-09-08 00:00:00.0","content":"予定の日付に病院に来てください","username":"本田慶応","status":"0"}
+//                         		]
+//                         				},
+// {"historyinfolist":[
+//                     {"appointdate":"2018-09-08 00:00:00.0","content":"予定の日付に病院に来てください","username":"本田慶応","status":"1"}
+//                     		]
+//                     				}
+//]
+
+
+
