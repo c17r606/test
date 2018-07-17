@@ -23,14 +23,14 @@ DROP TABLE IF EXISTS `cdata_appointments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cdata_appointments` (
-  `no` int(11) NOT NULL,
+  `no` int(11) NOT NULL auto_increment,
   `userid` varchar(30) DEFAULT NULL,
   `appointdate` datetime DEFAULT NULL,
   `header` varchar(50) DEFAULT NULL,
   `content` longtext,
   `status` char(1) DEFAULT NULL,
   PRIMARY KEY (`no`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +81,7 @@ CREATE TABLE `cdata_visithistory` (
   `content` longtext,
   `delflg` char(1) DEFAULT NULL,
   PRIMARY KEY (`no`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='通院履歴テーブル';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='通院履歴テーブル';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

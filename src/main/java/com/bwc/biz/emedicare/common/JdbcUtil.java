@@ -36,7 +36,7 @@ public class JdbcUtil {
 	/**
 	 * 连接字符串
 	 */
-	private static final String URLSTR = "jdbc:mysql://localhost:3306/ework?characterEncoding=UTF-8";
+	private static final String URLSTR = "jdbc:mysql://localhost:3306/emedicare?characterEncoding=UTF-8";
 	
 	private static String url = null;
 	private static String user = null;
