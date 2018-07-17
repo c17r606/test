@@ -30,13 +30,10 @@
   
 app.controller('ListController', function($scope,$http,transFormFactory) {
   var list = this;
-  list.no = "";
+  list.message = "";
   list.appintdate = new Date();
   list.content = "";
-  list.userlist = [
-	  {'userid':'U0000001' ,'username' : '豊田慶応'},
-	  {'userid':'U0000002' ,'username' : '本田慶応'}];
-  
+  list.userlist = [];
   list.appointmentinfolist=[];
   list.historyinfolist=[];
   (function(){
@@ -52,13 +49,12 @@ app.controller('ListController', function($scope,$http,transFormFactory) {
 	  		}).then(function (result) {
 	  			list.appointmentinfolist = result.data[0].appointmentinfolist;
 	  			list.historyinfolist = result.data[1].historyinfolist;
+	  			list.userlist = result.data[2].userlist;
 	          }).catch(function (result) {
-	          	list.message = "SORRY!エラーが発生しました。1";
+	          	list.message="SORRY!エラーが発生しました。";
 	          	$('#cmodal') .modal('show');
-	          });
-	      
-	  })();  
-  
+	          }); 
+	  })(); 
   
   list.countage=function(){
 	  var ageDifMs = Date.now() - this.appointdate.getTime();
